@@ -1,21 +1,44 @@
 import express from 'express';
-import path from 'node:path';
-import db from './config/connection.js';
-import routes from './routes/index.js';
+import { ApolloServer } from 'apollo-server-express';
+import path from 'path';
+import db from './config/connection';
+import { typeDefs, resolvers } from './schemas'; // Import your schema
+import { authMiddleware } from './services/auth'; // If you have authentication middleware
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Middleware for parsing JSON and URL-encoded form data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// if we're in production, serve client/build as static assets
+// Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
 
-app.use(routes);
+// Apollo Server setup
+const startApolloServer = async () => {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: authMiddleware, // Attach context for authentication
+  });
 
-db.once('open', () => {
-  app.listen(PORT, () => console.log(`🌍 Now listening on localhost:${PORT}`));
-});
+  // Start Apollo Server
+  await server.start();
+  server.applyMiddleware({ app });
+
+  // Open MongoDB connection
+  db.once('open', () => {
+    app.listen(PORT, () => {
+      console.log(`🌍 Now listening on http://localhost:${PORT}`);
+      console.log(`🚀 GraphQL available at http://localhost:${PORT}${server.graphqlPath}`);
+    });
+  });
+};
+
+// Start the server
+startApolloServer();
+
+

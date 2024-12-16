@@ -68,3 +68,74 @@ Apollo Client
 Bootstrap
 Others
 JSON Web Token (JWT)
+
+
+⚙️ Installation
+Clone the repository:
+
+bash
+Copy code
+git clone https://github.com/your-username/googlebooks-app.git
+cd googlebooks-app
+Install dependencies:
+
+At the root level:
+bash
+Copy code
+npm install
+Install dependencies for both server and client:
+bash
+Copy code
+cd server && npm install  
+cd ../client && npm install
+Setup environment variables:
+
+Create a .env file in the server folder with the following:
+plaintext
+Copy code
+MONGODB_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_jwt_secret_key
+PORT=3001
+NODE_ENV=production
+Run the app locally:
+
+bash
+Copy code
+npm run develop
+Build for production:
+
+bash
+Copy code
+npm run build
+🚀 Usage
+Search for Books:
+
+Enter a keyword to search for books using the Google Books API.
+Login/Signup:
+
+Create an account or log in to save books.
+Save Books:
+
+Save books to your account while logged in.
+View and Remove Saved Books:
+
+Manage books you've saved.
+Logout:
+
+Log out securely to end the session.
+📡 API Endpoints (GraphQL)
+Queries
+me: Fetch the logged-in user's data.
+Mutations
+login(email: String!, password: String!): Log in a user.
+addUser(username: String!, email: String!, password: String!): Create a new user.
+saveBook(bookData: BookInput!): Save a book.
+removeBook(bookId: String!): Remove a saved book.
+📸 Screenshots
+(Add relevant screenshots of the app here: login, search, and saved books pages.)
+
+🛠 Deployment
+The application is deployed on Render.
+MongoDB database is hosted on MongoDB Atlas.
+📝 License
+This project is licensed under the MIT License.
